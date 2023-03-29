@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.IO;
 using System.Web.UI.WebControls;
+using System.ComponentModel;
 
 namespace Equipment
 {
@@ -15,14 +16,10 @@ namespace Equipment
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (!IsPostBack)
-            //{
-
-            //    BindData();
-            //}
+            
         }
-        
 
+        //Custom date label and text box
         protected void SelectDate_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (SelectDateList.SelectedValue == "6")
@@ -39,92 +36,14 @@ namespace Equipment
                 txtStartDate.Visible = false;
                 txtEndDate.Visible = false;
             }
+            //
+            if (SelectDateList.SelectedValue != "0")
+            {
+                lblwarning.Visible = false;
+            }
         }
 
-        //Display All Data
-        //private void BindData()
-        //{
-
-        //    string connectionString = "Data Source=DESKTOP-JJNQLSP;Initial Catalog=equipment;Integrated Security=True";
-        //    string query = "GetAllData";
-        //    SqlConnection connection = new SqlConnection(connectionString);
-        //    SqlCommand command = new SqlCommand(query, connection);
-        //    command.CommandType = CommandType.StoredProcedure;
-        //    SqlDataAdapter adapter = new SqlDataAdapter(command);
-        //    DataSet dataset = new DataSet();
-        //    adapter.Fill(dataset);
-        //    //parameter for specific equipment
-        //    if (!string.IsNullOrEmpty(EquipmentList.SelectedValue))
-        //    {
-        //        command.Parameters.AddWithValue("@EquipmentName", EquipmentList.SelectedValue);
-        //    }
-        //    GridData.DataSource = dataset.Tables[0];
-        //    GridData.DataBind();
-        //    downtimechart.Series.Clear();
-        //    var statusInfos = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("StatusInfo")).Distinct();
-        //    foreach (var statusInfo in statusInfos)
-        //    {
-        //       //New series
-        //        Series series = new Series();
-        //        series.Name = statusInfo;
-        //        series.ChartType = SeriesChartType.StackedColumn;
-        //        if (statusInfo == "Up")
-        //        {
-        //            series.Color = Color.SeaGreen;
-        //        }
-        //        else
-        //        {
-        //            series.Color = Color.OrangeRed;
-        //        }
-        //        // Get all the unique equipment names and dates in the dataset
-        //        var equipmentNames = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("EquipementName")).Distinct();
-        //        var dates = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("Day")).Distinct();
-
-        //        foreach (var equipmentName in equipmentNames)
-        //        {
-        //            foreach (var date in dates)
-        //            {
-        //                // Check if there is data for this combination in the database
-        //                var rows = dataset.Tables[0].AsEnumerable().Where(row => row.Field<string>("EquipementName") == equipmentName && row.Field<string>("Day") == date && row.Field<string>("StatusInfo") == statusInfo);
-        //                if (rows.Count() == 0)
-        //                {
-        //                    // If there is no data, create a new data point with a downtime duration of zero
-        //                    DataPoint dataPoint = new DataPoint();
-        //                    dataPoint.YValues = new double[] { 0 };
-        //                    dataPoint.AxisLabel = date + "-" + equipmentName;
-        //                    series.Points.Add(dataPoint);
-        //                }
-        //                else
-        //                {
-                            
-        //                    foreach (DataRow row in rows)
-        //                    {
-        //                        int downtimeDurationInMinutes = Convert.ToInt32(row["Downtime_Duration"]);
-        //                        double downtimeDurationInHours = (double)downtimeDurationInMinutes / 60.0;
-        //                        string downtimeDurationInHoursStr = downtimeDurationInHours.ToString("0.00");
-        //                        DataPoint dataPoint = new DataPoint();
-        //                        dataPoint.YValues = new double[] { downtimeDurationInHours };
-        //                        dataPoint.AxisLabel = date + "-" + equipmentName;
-        //                        dataPoint.ToolTip = "Status: " + statusInfo + "  " + "Downtime: " + downtimeDurationInMinutes + " minutes";
-        //                        dataPoint.Label = downtimeDurationInHoursStr;
-        //                        series.Points.Add(dataPoint);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        // Add the series to the chart
-        //        downtimechart.Series.Add(series);
-
-        //    }
-
-
-        //    downtimechart.ChartAreas[0].AxisX.Title = "Equipment Name";
-        //    downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours";
-        //    downtimechart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
-           
-        //    downtimechart.ChartAreas[0].AxisX.Interval = 1;
-        //    downtimechart.DataBind();
-        //}
+        //Export Button 
         protected void ExportButton_Click(object sender, EventArgs e)
         {
             Response.Clear();
@@ -140,11 +59,34 @@ namespace Equipment
                 Response.Flush();
                 Response.End();
             }
-        }
 
+        }
+    
         public override void VerifyRenderingInServerForm(Control control)
         {
 
+        }
+        //Warning message for start date and end date validation
+        protected void txtEndDate_TextChanged(object sender, EventArgs e)
+        {
+            DateTime startDate;
+            DateTime endDate;
+
+            if (!DateTime.TryParse(txtStartDate.Text, out startDate) || !DateTime.TryParse(txtEndDate.Text, out endDate))
+            {
+                // one of the date inputs is invalid, do nothing
+                return;
+            }
+
+            if (startDate > endDate)
+            {
+                lbldaterange.Visible = true;
+            }
+            
+            else
+            {
+                lbldaterange.Visible = false;
+            }
         }
 
 
@@ -194,19 +136,12 @@ namespace Equipment
                     startDate = DateTime.MinValue;
                     break;
             }
-            if (startDate > endDate)
-            {
-                lbldaterange.Visible = true;
-            }
-            else
-            {
-                lbldaterange.Visible= false;
-            }
+            
             SqlConnection connection = new SqlConnection(connectionString);
             SqlCommand command = new SqlCommand(query, connection);
             command.CommandType = CommandType.StoredProcedure;
             SqlDataAdapter adapter = new SqlDataAdapter(command);
-           
+           //adding the values of start date and end date in Procedure
             command.Parameters.AddWithValue("@StartDate", startDate);
             command.Parameters.AddWithValue("@EndDate", endDate);
             //parameter for specific equipment
@@ -216,7 +151,6 @@ namespace Equipment
             }
             DataSet dataset = new DataSet();
             adapter.Fill(dataset);
-
 
             // No data in the selected date range
             if (dataset.Tables[0].Rows.Count == 0)
@@ -238,6 +172,7 @@ namespace Equipment
                 downtimechart.Series[0].YValueMembers = "Downtime_Duration";
                 downtimechart.ChartAreas[0].AxisX.Title = "Date and Equipment Name";
                 downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours";
+                //chart title based on selected Equipment
                 if (!string.IsNullOrEmpty(EquipmentList.SelectedValue))
                 {
                     downtimechart.Titles.Add("Downtime Report for " + EquipmentList.SelectedItem.Text);
@@ -246,23 +181,24 @@ namespace Equipment
                 {
                     downtimechart.Titles.Add("Downtime Report for All Equipments");
                 }
-
+                //Chart type
                 switch (ChartTypeDropDownList.SelectedValue)
                 {
+                    //pie chart
                     case "Pie":
                         downtimechart.Series[0].ChartType = SeriesChartType.Pie;
                         downtimechart.Series[0].LegendText = "#AXISLABEL";
                         dataTable.Rows.Add("No Data", 0);
                         break;
+                    //Stacked Column CHart
                     case "Column":
                         downtimechart.Series[0].ChartType = SeriesChartType.Column;
-
                         break;
+                    //Line Chart
                     case "Line":
                         downtimechart.Series[0].ChartType = SeriesChartType.Line;
                         break;
                 }
-
             }
             else
             {
@@ -280,7 +216,7 @@ namespace Equipment
                 downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours";
                 downtimechart.Series[0].Label = "#VALY{0}";
 
-
+                //CHart title based on Equipment selection
                 if (!string.IsNullOrEmpty(EquipmentList.SelectedValue))
                 {
                     downtimechart.Titles.Add("Downtime Report for " + EquipmentList.SelectedItem.Text);
@@ -289,14 +225,16 @@ namespace Equipment
                 {
                     downtimechart.Titles.Add("Downtime Report for All Equipments");
                 }
-
+                //Chart type
                 switch (ChartTypeDropDownList.SelectedValue)
                 {
+                    //pie chart
                     case "Pie":
                         downtimechart.Series[0].ChartType = SeriesChartType.Pie;
                         downtimechart.Series[0].LegendText = "#AXISLABEL- #VALY{0}";
                         downtimechart.Series[0].Label = "#VALY{0}";
                         break;
+                    //stacked column chart
                     case "Column":
                         downtimechart.Series[0].ChartType = SeriesChartType.Column;
                         downtimechart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
@@ -360,11 +298,8 @@ namespace Equipment
                             // Add the series to the chart
                             downtimechart.Series.Add(series);
                         }
-
-
-
-
                         break;
+                    // Line chart
                     case "Line":
                         downtimechart.Series[0].ChartType = SeriesChartType.Line;
                         downtimechart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
@@ -407,7 +342,7 @@ namespace Equipment
                             }
                             // Add the series to the chart
                             downtimechart.Series.Add(series);
-                        }
+                        }   
                         break;
                 }
 

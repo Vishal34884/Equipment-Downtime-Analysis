@@ -21,7 +21,13 @@
             background-color: white;
             margin-left: 0px;
         }
+        .nowrap {
+            white-space: nowrap;
+        }
+
     </style>
+
+    
     <br />
     <br />
 
@@ -44,7 +50,7 @@
     <asp:Label ID="lblStartDate" runat="server" Text="Start Date:" Visible="false" Style="color: WHite" Font-Bold="true"></asp:Label>
     <asp:TextBox ID="txtStartDate" runat="server" Visible="false" TextMode="Date" DateFormatString="dd/MM/yyyy"></asp:TextBox>
     <asp:Label ID="lblEndDate" runat="server" Text="End Date:" Visible="false" Style="color: WHite" Font-Bold="true"></asp:Label>
-    <asp:TextBox ID="txtEndDate" runat="server" Visible="false" TextMode="Date" DateFormatString="dd/MM/yyyy"></asp:TextBox>
+    <asp:TextBox ID="txtEndDate" runat="server" Visible="false" TextMode="Date" DateFormatString="dd/MM/yyyy" OnTextChanged="txtEndDate_TextChanged" AutoPostBack="true" ></asp:TextBox>
     <asp:Label ID="lbldaterange" runat="server" ForeColor="Red" Font-Bold="true" Text="Select Valid Date Range" Visible="false"></asp:Label>
     <br />
     <br />
@@ -56,7 +62,7 @@
          <asp:ListItem Text="Line Chart" Value="Line"></asp:ListItem>
      </asp:DropDownList>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-     <asp:Button ID="btnRun" runat="server" Text="Run" Width="126px" OnClick="btnRun_Click" CssClass="btn btn-success" />
+     <asp:Button ID="btnRun" runat="server" Text="Run" Width="126px" OnClick="btnRun_Click"  CssClass="btn btn-success" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
      <asp:Button ID="ExportButton" runat="server" Text="Export Data" OnClick="ExportButton_Click" CssClass="btn btn-primary" Width="120px" />
     <br />
