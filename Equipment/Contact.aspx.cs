@@ -16,100 +16,9 @@ namespace Equipment
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (!IsPostBack)
-            //{
-
-            //    BindData();
-            //}
+      
         }
-
-        //private void BindData()
-        //{
-
-        //    string connectionString = "Data Source=DESKTOP-JJNQLSP;Initial Catalog=equipment;Integrated Security=True";
-        //    string query = "GetAllData";
-        //    SqlConnection connection = new SqlConnection(connectionString);
-        //    SqlCommand command = new SqlCommand(query, connection);
-        //    command.CommandType = CommandType.StoredProcedure;
-        //    SqlDataAdapter adapter = new SqlDataAdapter(command);
-        //    DataSet dataset = new DataSet();
-        //    adapter.Fill(dataset);
-        //    //parameter for specific equipment
-        //    if (!string.IsNullOrEmpty(EquipmentList.SelectedValue))
-        //    {
-        //        command.Parameters.AddWithValue("@EquipmentName", EquipmentList.SelectedValue);
-        //    }
-        //    GridData.DataSource = dataset.Tables[0];
-        //    GridData.DataBind();
-
-        //    // Clear any existing series from the chart
-        //    downtimechart.Series.Clear();
-
-        //    // Create a new series for each unique status info value in the dataset
-        //    var statusInfos = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("StatusInfo")).Distinct();
-        //    foreach (var statusInfo in statusInfos)
-        //    {
-        //        // Create a new series for this status info and set its properties
-        //        Series series = new Series();
-        //        series.Name = statusInfo;
-        //        series.ChartType = SeriesChartType.StackedColumn;
-        //        if (statusInfo == "Up")
-        //        {
-        //            series.Color = Color.SeaGreen;
-        //        }
-        //        else
-        //        {
-        //            series.Color = Color.OrangeRed;
-        //        }
-
-        //        // Get all the unique equipment names and dates in the dataset
-        //        var equipmentNames = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("EquipementName")).Distinct();
-        //        var dates = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("Day")).Distinct();
-
-        //        // Loop through all the possible combinations of equipment names and dates
-        //        foreach (var equipmentName in equipmentNames)
-        //        {
-        //            foreach (var date in dates)
-        //            {
-        //                // Check if there is data for this combination in the database
-        //                var rows = dataset.Tables[0].AsEnumerable().Where(row => row.Field<string>("EquipementName") == equipmentName && row.Field<string>("Day") == date && row.Field<string>("StatusInfo") == statusInfo);
-        //                if (rows.Count() == 0)
-        //                {
-        //                    // If there is no data, create a new data point with a downtime duration of zero
-        //                    DataPoint dataPoint = new DataPoint();
-        //                    dataPoint.YValues = new double[] { 0 };
-        //                    dataPoint.AxisLabel = date + "-" + equipmentName;
-        //                    series.Points.Add(dataPoint);
-        //                }
-        //                else
-        //                {
-        //                    // If there is data, loop through the rows and add them as data points to the series
-        //                    foreach (DataRow row in rows)
-        //                    {
-        //                        int downtimeDurationInMinutes = Convert.ToInt32(row["Downtime_Duration"]);
-        //                        double downtimeDurationInHours = (double)downtimeDurationInMinutes / 60.0;
-        //                        string downtimeDurationInHoursStr = downtimeDurationInHours.ToString("0.00");
-        //                        DataPoint dataPoint = new DataPoint();
-        //                        dataPoint.YValues = new double[] { downtimeDurationInHours };
-        //                        dataPoint.AxisLabel = date + "-" + equipmentName;
-        //                        dataPoint.ToolTip = "Status: " + statusInfo + "  " + "Downtime: " + downtimeDurationInMinutes + " minutes";
-        //                        dataPoint.Label = downtimeDurationInHoursStr;
-        //                        series.Points.Add(dataPoint);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        // Add the series to the chart
-        //        downtimechart.Series.Add(series);
-        //    }
-
-        //    downtimechart.ChartAreas[0].AxisX.Title = "Date and Equipment Name";
-        //    downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours";
-        //    downtimechart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
-        //    downtimechart.Series[0].Label = "#VALY{0}";
-        //    downtimechart.ChartAreas[0].AxisX.Interval = 1;
-        //    downtimechart.DataBind();
-        //}
+        // Export data
         protected void ExportButton_Click(object sender, EventArgs e)
         {
             Response.Clear();
@@ -138,36 +47,36 @@ namespace Equipment
         {
             string connectionString = "Data Source=DESKTOP-JJNQLSP;Initial Catalog=equipment;Integrated Security=True";
             string query = "";
+            //If duration selected value is select then display empty grid and warining message
             if (SelectDateList.SelectedValue == "0")
             {
-                //BindData();
-                GridData.Visible = false;
-                lblwarning.Visible = true;
+                GridData.Visible = false; //Hiding the grid data
+                lblwarning.Visible = true; // Displaying the warining Message
                 return;
             }
             else
             {
-                GridData.Visible = true;
-                lblwarning.Visible = false;
+                GridData.Visible = true; //Displaying the grid data
+                lblwarning.Visible = false; //Hiding the warining Message
             }
 
-
+            //  select Time period
             switch (SelectDateList.SelectedValue)
             {
-                case "date":
-                    query = "EquipmentDowntimeByDate";
-                    downtimechart.ChartAreas[0].AxisX.Title = "Date and Equipment Name";
-                    downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours";
+                case "date": //Date
+                    query = "EquipmentDowntimeByDate"; //Stored procedure for summarize the data by date
+                    downtimechart.ChartAreas[0].AxisX.Title = "Date and Equipment Name"; //X Axis Title
+                    downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours"; //Y Axis Title
                     break;
-                case "month":
-                    query = "EquipmentDowntimeByMont";
-                    downtimechart.ChartAreas[0].AxisX.Title = "Month and Equipment Name";
-                    downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours";
+                case "month": // Month
+                    query = "EquipmentDowntimeByMont";  //Stored procedure for summarize the data by Month
+                    downtimechart.ChartAreas[0].AxisX.Title = "Month and Equipment Name"; //X Axis Title
+                    downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours"; //Y Axis Title
                     break;
-                case "year":
-                    query = "EquipmentDowntimeByYear";
-                    downtimechart.ChartAreas[0].AxisX.Title = "Year and Equipment Name";
-                    downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours";
+                case "year": // Year
+                    query = "EquipmentDowntimeByYear";  //Stored procedure for summarize the data by Year
+                    downtimechart.ChartAreas[0].AxisX.Title = "Year and Equipment Name"; //X Axis Title
+                    downtimechart.ChartAreas[0].AxisY.Title = "Downtime Duration in Hours"; //Y Axis Title
                     break;
                 default:
                     break;
@@ -177,7 +86,7 @@ namespace Equipment
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.CommandType = CommandType.StoredProcedure;
-
+                //parameter for specific equipment
                 if (!string.IsNullOrEmpty(EquipmentList.SelectedValue))
                 {
                     command.Parameters.AddWithValue("@EquipmentName", EquipmentList.SelectedValue);
@@ -193,6 +102,7 @@ namespace Equipment
 
                 // Bind data to chart
                 downtimechart.DataSource = dataset.Tables[0];
+                //chart title based on selected Equipment
                 if (!string.IsNullOrEmpty(EquipmentList.SelectedValue))
                 {
                     downtimechart.Titles.Add("Downtime Report for " + EquipmentList.SelectedItem.Text);
@@ -201,13 +111,14 @@ namespace Equipment
                 {
                     downtimechart.Titles.Add("Downtime Report for All Equipments");
                 }
+                //Chart Selection
                 switch (ChartTypeDropDownList.SelectedValue)
                 {
 
-                    case "Pie":
-                        downtimechart.Series["Downtime"].ChartType = SeriesChartType.Pie;
-                        downtimechart.Series["Downtime"].Font = new Font("Verdana", 8, FontStyle.Bold);
-                        downtimechart.Series["Downtime"].LabelForeColor = Color.Black;
+                    case "Pie": // Pie Chart
+                        downtimechart.Series["Downtime"].ChartType = SeriesChartType.Pie; //Chart Type
+                        downtimechart.Series["Downtime"].Font = new Font("Verdana", 8, FontStyle.Bold); // Label Font style
+                        downtimechart.Series["Downtime"].LabelForeColor = Color.Black; // Label Color
                         downtimechart.Series["Downtime"]["PieLabelStyle"] = "Outside";
 
                         // Set the tooltip text for each data point
@@ -215,47 +126,46 @@ namespace Equipment
                         {
                             point.ToolTip = "TotalDowntime: " + point.YValues[0].ToString();
                         }
-
-                        if (SelectDateList.SelectedValue == "date")
+                        // Chart Value Members Based on the dropdown selection
+                        if (SelectDateList.SelectedValue == "date") // By date
                         {
-                            downtimechart.Series[0].XValueMember = "Date";
-                            downtimechart.Series[0].YValueMembers = "TotalDowntime";
-                            downtimechart.Series[0].LegendText = "#AXISLABEL - #VALY{0}";
-                            downtimechart.Series["Downtime"].Label = "#VALY{0}";
+                            downtimechart.Series[0].XValueMember = "Date"; //X Axis Value
+                            downtimechart.Series[0].YValueMembers = "TotalDowntime"; //Y Axis Value
+                            downtimechart.Series[0].LegendText = "#AXISLABEL - #VALY{0}";//Legend
+                            downtimechart.Series["Downtime"].Label = "#VALY{0}"; // Label
 
                         }
-                        else if (SelectDateList.SelectedValue == "month")
+                        else if (SelectDateList.SelectedValue == "month")// By Month
                         {
-                            downtimechart.Series[0].XValueMember = "Month";
-                            downtimechart.Series[0].YValueMembers = "TotalDowntime";
-                            downtimechart.Series[0].LegendText = "#AXISLABEL - #VALY{0}";
-                            downtimechart.Series["Downtime"].Label = "#VALY{0}";
+                            downtimechart.Series[0].XValueMember = "Month"; //X Axis Value
+                            downtimechart.Series[0].YValueMembers = "TotalDowntime"; //Y Axis Value
+                            downtimechart.Series[0].LegendText = "#AXISLABEL - #VALY{0}"; //Legend
+                            downtimechart.Series["Downtime"].Label = "#VALY{0}"; // Label
                         }
-                        else if (SelectDateList.SelectedValue == "year")
+                        else if (SelectDateList.SelectedValue == "year")// By Year
                         {
-                            downtimechart.Series[0].XValueMember = "Year";
-                            downtimechart.Series[0].YValueMembers = "TotalDowntime";
-                            downtimechart.Series[0].LegendText = "#VALX{0} - #VALY{0}";
-                            downtimechart.Series["Downtime"].Label = "#VALY{0}";
+                            downtimechart.Series[0].XValueMember = "Year"; //X Axis Value
+                            downtimechart.Series[0].YValueMembers = "TotalDowntime"; //Y Axis Value
+                            downtimechart.Series[0].LegendText = "#VALX{0} - #VALY{0}"; //Legend
+                            downtimechart.Series["Downtime"].Label = "#VALY{0}"; // Label
                         }
                         break;
 
-                    case "Column":
-                        downtimechart.Series[0].ChartType = SeriesChartType.Column;
+                    case "Column": // Stacked Column Chart
                         downtimechart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
                         downtimechart.ChartAreas[0].AxisX.Interval = 1;
                         downtimechart.ChartAreas[0].AxisX.LabelStyle.Angle = -90;
                         // Clear any existing series from the chart
                         downtimechart.Series.Clear();
 
-                        // Create a new series for each unique status info value in the dataset
+                        // Create a new series for each unique status info
                         var statusInfos = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("StatusInfo")).Distinct();
                         foreach (var statusInfo in statusInfos)
                         {
                             // Creating new series for status info 
                             Series series = new Series();
                             series.Name = statusInfo;
-                            series.ChartType = SeriesChartType.StackedColumn;
+                            series.ChartType = SeriesChartType.StackedColumn;  // Chart Type
                             if (statusInfo == "Up")
                             {
                                 series.Color = Color.SeaGreen;
@@ -265,86 +175,85 @@ namespace Equipment
                                 series.Color = Color.OrangeRed;
                             }
 
-                            // Getting all unique equipment name and date in the dataset
+                            // Getting all unique equipment name and date
                             var equipmentNames = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("EquipementName")).Distinct();
-                           
-
                             var dates = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("Date")).Distinct();
-
-                            if (SelectDateList.SelectedValue == "date")
+                            // Assiging the values for dates variable based on time period selection
+                            if (SelectDateList.SelectedValue == "date") //Date
                             {
                                 dates = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("Date")).Distinct();
                             }
-                            else if (SelectDateList.SelectedValue == "month")
+                            else if (SelectDateList.SelectedValue == "month") //Month
                             {
                                 dates = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("Month")).Distinct();
                             }
-                            else
+                            else // Year
                             {
                                 dates = dataset.Tables[0].AsEnumerable().Select(row => row.Field<int>("Year").ToString()).Distinct();
 
                             }
+                            // Getting all unique equipment name and date
                             foreach (var equipmentName in equipmentNames)
                             {
                                 foreach (var date in dates)
                                 {
                                     var rows = dataset.Tables[0].AsEnumerable().Where(row => row.Field<string>("EquipementName") == equipmentName && row.Field<string>("Date") == date && row.Field<string>("StatusInfo") == statusInfo);
-                                    if (SelectDateList.SelectedValue == "date")
+                                    // Assigning values to rows variable based on time period selection
+                                    if (SelectDateList.SelectedValue == "date") //Date
                                     {
                                          rows = dataset.Tables[0].AsEnumerable().Where(row => row.Field<string>("EquipementName") == equipmentName && row.Field<string>("Date") == date && row.Field<string>("StatusInfo") == statusInfo);
                                     }
-                                    else if (SelectDateList.SelectedValue == "month")
+                                    else if (SelectDateList.SelectedValue == "month") //Month
                                     {
                                         rows = dataset.Tables[0].AsEnumerable().Where(row => row.Field<string>("EquipementName") == equipmentName && row.Field<string>("Month") == date && row.Field<string>("StatusInfo") == statusInfo);
                                     }
-                                    else
+                                    else // Year
                                     {
                                         rows = dataset.Tables[0].AsEnumerable().Where(row => row.Field<string>("EquipementName") == equipmentName && Convert.ToInt32(row["Year"]) == Convert.ToInt32(date) && row.Field<string>("StatusInfo") == statusInfo);
 
                                     }
+                                    // If there is no data, create a new data point with a downtime duration of zero
                                     if (rows.Count() == 0)
-                                    {
-                                        // If there is no data, create a new data point with a downtime duration of zero
+                                    { 
                                         DataPoint dataPoint = new DataPoint();
                                         dataPoint.YValues = new double[] { 0 };
                                         dataPoint.AxisLabel = date + " - " + equipmentName;
                                         series.Points.Add(dataPoint);
                                     }
                                     else
+                                    // If there is data, add them as data points to the series
                                     {
-                                        // If there is data, loop through the rows and add them as data points to the series
                                         foreach (DataRow row in rows)
                                         {
                                             int downtimeDurationInMinutes = Convert.ToInt32(row["TotalDowntime"]);
+                                            // Converting downtime from minutes to hours
                                             double downtimeDurationInHours = (double)downtimeDurationInMinutes / 60.0;
                                             string downtimeDurationInHoursStr = downtimeDurationInHours.ToString("0.00", CultureInfo.InvariantCulture);
 
                                             DataPoint dataPoint = new DataPoint();
                                             dataPoint.YValues = new double[] { downtimeDurationInHours };
-
-                                             if (SelectDateList.SelectedValue == "date")
+                                            //X Axis Label based on time period selection
+                                             if (SelectDateList.SelectedValue == "date") //Date
                                             {
-                                                dataPoint.AxisLabel = row["Date"] + "-" + row["EquipementName"];
+                                                dataPoint.AxisLabel = row["Date"] + "-" + row["EquipementName"];//X Axis Label
                                             }
-                                            else if (SelectDateList.SelectedValue == "month")
+                                            else if (SelectDateList.SelectedValue == "month")//Month
                                             {
-                                                dataPoint.AxisLabel = row["Month"] + "-" + row["EquipementName"];
+                                                dataPoint.AxisLabel = row["Month"] + "-" + row["EquipementName"];//X Axis Label
                                             }
-                                            else
+                                            else //Year
                                             {
-                                                dataPoint.AxisLabel = row["Year"].ToString() + "-" + row["EquipementName"];
+                                                dataPoint.AxisLabel = row["Year"].ToString() + "-" + row["EquipementName"];//X Axis Label
 
                                             }
                                             dataPoint.ToolTip = "Status: " + statusInfo + "  " + "Downtime: " + downtimeDurationInMinutes + " minutes";
-                                            dataPoint.Label = downtimeDurationInHoursStr;
+                                            dataPoint.Label = downtimeDurationInHoursStr; //Label
                                             series.Points.Add(dataPoint);
 
                                         }
                                     }
                                 }
                             }
-                           
-
                             // Add the series to the chart
                             downtimechart.Series.Add(series);
                         }
@@ -352,21 +261,20 @@ namespace Equipment
                         break;
 
                     
-                    case "Line":
-                        downtimechart.Series[0].ChartType = SeriesChartType.Line;
+                    case "Line": // Line Chart
                         downtimechart.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
                         downtimechart.ChartAreas[0].AxisX.Interval = 1;
                         downtimechart.ChartAreas[0].AxisX.LabelStyle.Angle = -90;
-
+                        // CLear existing series
                         downtimechart.Series.Clear();
-                        
+                        // Create a new series for each unique status info
                         var statusInfos1 = dataset.Tables[0].AsEnumerable().Select(row => row.Field<string>("StatusInfo")).Distinct();
                         foreach (var statusInfo in statusInfos1)
                         {
-                            //New series
+                            // Creating new series for status info 
                             Series series = new Series();
                             series.Name = statusInfo;
-                            series.ChartType = SeriesChartType.Line;
+                            series.ChartType = SeriesChartType.Line; // Chart Type
                             // Set the color of the series based on  StatusInfo 
                             if (statusInfo == "Up")
                             {
@@ -378,30 +286,31 @@ namespace Equipment
                             }
                             // Get all the rows with the current StatusInfo
                             var rows = dataset.Tables[0].AsEnumerable().Where(row => row.Field<string>("StatusInfo") == statusInfo);
-                            
                             foreach (DataRow row in rows)
                             {
                                 // Get the values from the row
                                 int downtimeDurationInMinutes = Convert.ToInt32(row["TotalDowntime"]);
+                                // Converting downtime from minutes to hours
                                 double downtimeDurationInHours = (double)downtimeDurationInMinutes / 60.0;
                                 string downtimeDurationInHoursStr = downtimeDurationInHours.ToString("0.00");
                                 DataPoint dataPoint = new DataPoint();
-                                dataPoint.YValues = new double[] { downtimeDurationInHours };
-                                if (SelectDateList.SelectedValue == "date")
+                                dataPoint.YValues = new double[] { downtimeDurationInHours }; // Y Axis datapoint
+                                //X Axis Label based on time period selection
+                                if (SelectDateList.SelectedValue == "date") //Date
                                 {
-                                    dataPoint.AxisLabel = row["Date"] + "-" + row["EquipementName"];
+                                    dataPoint.AxisLabel = row["Date"] + "-" + row["EquipementName"]; //X Axis Label
                                 }
-                                else if (SelectDateList.SelectedValue == "month")
+                                else if (SelectDateList.SelectedValue == "month") // Month
                                 {
-                                    dataPoint.AxisLabel = row["Month"] + "-" + row["EquipementName"];
+                                    dataPoint.AxisLabel = row["Month"] + "-" + row["EquipementName"]; //X Axis Label
                                 }
-                                else
+                                else// Year
                                 {
-                                    dataPoint.AxisLabel = row["Year"] + "-" + row["EquipementName"];
+                                    dataPoint.AxisLabel = row["Year"] + "-" + row["EquipementName"]; //X Axis Label
                                 }
                                
                                 dataPoint.ToolTip = "Status: " + statusInfo + "  " + "Downtime: " + downtimeDurationInMinutes + " minutes";
-                                dataPoint.Label = downtimeDurationInHoursStr;
+                                dataPoint.Label = downtimeDurationInHoursStr; //Label
                                 series.Points.Add(dataPoint);
                             }
                             // Add the series to the chart

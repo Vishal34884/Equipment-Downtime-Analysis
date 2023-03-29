@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace Equipment
 {
-    public partial class DataInsertion : System.Web.UI.Page
+    public partial class DataInsertion : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -106,7 +106,5 @@ namespace Equipment
             valintervalend.Visible = false;
             valdate.Visible = false;
         }
-
-
     }
 }

@@ -38,32 +38,36 @@
     <!--Dropdown for Duration-->
     <b style="color: WHite;font-size:medium"">Duration</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
     <asp:DropDownList ID="SelectDateList" runat="server" Width="194px" AutoPostBack="True" OnSelectedIndexChanged="SelectDate_SelectedIndexChanged">
-        <asp:ListItem Text="--Select--" Value="0"></asp:ListItem>
-        <asp:ListItem Text="1 Day" Value="1"></asp:ListItem>
-        <asp:ListItem Text="7 Days" Value="7"></asp:ListItem>
-        <asp:ListItem Text="30 Days" Value="30"></asp:ListItem>
-        <asp:ListItem Text="90 Days" Value="90"></asp:ListItem>
-        <asp:ListItem Text="365 Days" Value="365"></asp:ListItem>
-        <asp:ListItem Text="Custom Date" Value="6"></asp:ListItem>
+        <asp:ListItem Text="--Select--" Value="0"></asp:ListItem> <%--select--%>
+        <asp:ListItem Text="1 Day" Value="1"></asp:ListItem> <%--1 Day--%>
+        <asp:ListItem Text="7 Days" Value="7"></asp:ListItem> <%--7 Days--%>
+        <asp:ListItem Text="30 Days" Value="30"></asp:ListItem> <%--30 Days--%>
+        <asp:ListItem Text="90 Days" Value="90"></asp:ListItem> <%--90 Days--%>
+        <asp:ListItem Text="365 Days" Value="365"></asp:ListItem> <%--365 Days--%>
+        <asp:ListItem Text="Custom Date" Value="6"></asp:ListItem> <%--Custom Date--%>
     </asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="lblwarning" runat="server" ForeColor="Red" Font-Bold="true" Text="Please Select Duration" Visible="false"></asp:Label>
-
+    <%--Start Date--%>
     <asp:Label ID="lblStartDate" runat="server" Text="Start Date:" Visible="false" Style="color: WHite" Font-Bold="true"></asp:Label>
     <asp:TextBox ID="txtStartDate" runat="server" Visible="false" TextMode="Date" DateFormatString="dd/MM/yyyy"></asp:TextBox>
+    <%--Start Date--%>
     <asp:Label ID="lblEndDate" runat="server" Text="End Date:" Visible="false" Style="color: WHite" Font-Bold="true"></asp:Label>
     <asp:TextBox ID="txtEndDate" runat="server" Visible="false" TextMode="Date" DateFormatString="dd/MM/yyyy" OnTextChanged="txtEndDate_TextChanged" AutoPostBack="true" ></asp:TextBox>
+    <%--Warning Message--%>
     <asp:Label ID="lbldaterange" runat="server" ForeColor="Red" Font-Bold="true" Text="Select Valid Date Range" Visible="false"></asp:Label>
     <br />
     <br />
     <!--Dropdown for Chart Type-->
     <b style="color: White;font-size:medium"">Chart Type</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 
      <asp:DropDownList ID="ChartTypeDropDownList" runat="server" Width="194px">
-         <asp:ListItem Text="Column Chart" Value="Column"></asp:ListItem>
-         <asp:ListItem Text="Pie Chart" Value="Pie"></asp:ListItem>
-         <asp:ListItem Text="Line Chart" Value="Line"></asp:ListItem>
+         <asp:ListItem Text="Column Chart" Value="Column"></asp:ListItem> <%--Stacked Column Chart--%>
+         <asp:ListItem Text="Pie Chart" Value="Pie"></asp:ListItem> <%--Pie Chart--%>
+         <asp:ListItem Text="Line Chart" Value="Line"></asp:ListItem> <%--Line Chart--%>
      </asp:DropDownList>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    <%--Run Button--%>
      <asp:Button ID="btnRun" runat="server" Text="Run" Width="126px" OnClick="btnRun_Click"  CssClass="btn btn-success" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%--Export Button--%>
      <asp:Button ID="ExportButton" runat="server" Text="Export Data" OnClick="ExportButton_Click" CssClass="btn btn-primary" Width="120px" />
     <br />
     <br />

@@ -29,13 +29,13 @@
 
     <h1 style="align-content: center; padding-left: 300px; color: WHite"><b>OVERALL EQUIPMENT DOWNTIME ANALYSIS</b></h1>
     <br />
-    <!--Dropdown for Duration-->
+    <!--Dropdown for Time Period-->
     <b style="color: WHite;font-size:medium">Time Period</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <asp:DropDownList ID="SelectDateList" runat="server" Width="194px" AutoPostBack="True">
-        <asp:ListItem Text="--Select--" Value="0"></asp:ListItem>
-        <asp:ListItem Text="Date" Value="date"></asp:ListItem>
-        <asp:ListItem Text="Month" Value="month"></asp:ListItem>
-        <asp:ListItem Text="Year" Value="year"></asp:ListItem>
+        <asp:ListItem Text="--Select--" Value="0"></asp:ListItem>   <%--Select--%>
+        <asp:ListItem Text="Date" Value="date"></asp:ListItem>  <%--Date--%>
+        <asp:ListItem Text="Month" Value="month"></asp:ListItem>  <%--Month--%>
+        <asp:ListItem Text="Year" Value="year"></asp:ListItem>  <%--Year--%>
     </asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="lblwarning" runat="server" ForeColor="Red" Text="Please Select Time Period" Visible="false"></asp:Label>
 
     <br />
@@ -43,9 +43,9 @@
     <!--Dropdown for Chart Type-->
     <b style="color: White;font-size:medium"">Chart Type</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
      <asp:DropDownList ID="ChartTypeDropDownList" runat="server" Width="194px">
-         <asp:ListItem Text="Column Chart" Value="Column"></asp:ListItem>
-         <asp:ListItem Text="Pie Chart" Value="Pie"></asp:ListItem>
-         <asp:ListItem Text="Line Chart" Value="Line"></asp:ListItem>
+         <asp:ListItem Text="Column Chart" Value="Column"></asp:ListItem>  <%--Stacked Column Chart--%>
+         <asp:ListItem Text="Pie Chart" Value="Pie"></asp:ListItem>  <%--Pie Chart--%>
+         <asp:ListItem Text="Line Chart" Value="Line"></asp:ListItem>  <%--Line Chart--%>
      </asp:DropDownList>
      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
      <asp:Button ID="btnRun" runat="server" Text="Run" Width="126px" OnClick="btnRun_Click" CssClass="btn btn-success" />
