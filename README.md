@@ -3,6 +3,7 @@
 The Equipment Downtime Analytics project aims to develop a web-based application using ASP.NET for analyzing and reporting on equipment downtime in manufacturing or industrial settings. By providing valuable insights into the causes and duration of equipment downtime, this application enables companies to identify areas for improvement, optimize production processes, and reduce costs.
 
 
+
 **Features:**
 
 Data Management Module: Allows users to manage and organize equipment downtime data efficiently.
@@ -15,6 +16,7 @@ Report Module: Generates comprehensive reports based on analyzed data, providing
 
 
 
+
 **Responsibilities:**
 
 Developed Data Management, Downtime Analysis, and Report modules to analyze and present equipment downtime data effectively.
@@ -24,6 +26,7 @@ Utilized data-bound controls such as GridView and Charts to enhance the user int
 
 
 Implemented MS SQL 2019 Stored Procedures to optimize data processing and retrieval for improved performance.
+
 
 
 
